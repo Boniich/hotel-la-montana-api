@@ -34,4 +34,20 @@ class UserController extends Controller
 
         return response($user,Response::HTTP_CREATED);
     }
+
+    public function login(Request $request){
+
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if(Auth::attempt($credentials)){
+            $user = Auth::user();
+            $token = $user->createToken('token')->plainTextToken;
+            return response(['token'=>$token], Response::HTTP_OK);
+        }else{
+            return response(['message' => 'Invalid Credentials'],Response::HTTP_UNAUTHORIZED);
+        }
+    }
 }
