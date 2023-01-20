@@ -66,8 +66,14 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Food $food)
+    public function show($id)
     {
+        $food = Food::find($id);
+
+        if (is_null($food)) {
+            return response()->json("index not found", 404);
+        }
+
         return $food;
     }
 
@@ -80,7 +86,31 @@ class FoodController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $food = Food::find($id);
+
+        if (is_null($food)) {
+            return response()->json("index not found", 404);
+        }
+
+        if ($request->input('name')) {
+            $food->name = $request->input('name');
+        }
+
+        if ($request->input('description')) {
+            $food->description = $request->input('description');
+        }
+
+        if ($request->input('price')) {
+            $food->price = $request->input('price');
+        }
+
+        if ($request->input('preparationTime')) {
+            $food->preparation_time = $request->input('preparationTime');
+        }
+
+        $food->update();
+
+        return response()->json($food);
     }
 
     /**
