@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Food;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
@@ -29,21 +30,34 @@ class FoodController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'image' => 'required',
+            'image' => 'required|image',
             'description' => 'required',
             'price' => 'required',
             'preparationTime' => 'required',
         ]);
 
         $newFood = new Food;
-        $newFood->name = $request->name;
-        $newFood->description = $request->description;
-        $newFood->image = $request->image;
-        $newFood->price = $request->price;
-        $newFood->preparation_time = $request->preparationTime;
-        $newFood->save();
 
-        return $newFood;
+        if ($request->hasFile('image')) {
+            $originalNameImage = $request->file('image')->getClientOriginalName();
+            $newName = Carbon::now()->timestamp . "_" . $originalNameImage;
+            $destinyFolder = './upload/';
+            $request->file('image')->move($destinyFolder, $newName);
+
+            // $img = $request->file('image')->store('public/images');
+
+            //$url = Storage::url($img);
+
+            $newFood->name = $request->name;
+            $newFood->description = $request->description;
+            //$newFood->image = $url;
+            $newFood->image = ltrim($destinyFolder, '.') . $newName;
+            $newFood->price = $request->price;
+            $newFood->preparation_time = $request->preparationTime;
+            $newFood->save();
+
+            return response()->json($newFood);
+        }
     }
 
     /**
