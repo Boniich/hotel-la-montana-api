@@ -66,20 +66,9 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Food $food)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $food;
     }
 
     /**
@@ -102,6 +91,14 @@ class FoodController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $food = Food::find($id);
+
+        if (is_null($food)) {
+            return response()->json("index not found", 404);
+        }
+
+        $food->delete();
+
+        return response()->noContent();
     }
 }
