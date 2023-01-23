@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Cookie;
 
 class UserController extends Controller
 {
-    public function register(Request $request){
+    public function register(Request $request)
+    {
 
         //1- Validar los datos
 
@@ -32,22 +33,23 @@ class UserController extends Controller
 
         //3- Respuesta
 
-        return response($user,Response::HTTP_CREATED);
+        return response($user, Response::HTTP_CREATED);
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('token')->plainTextToken;
-            return response(['token'=>$token], Response::HTTP_OK);
-        }else{
-            return response(['message' => 'Invalid Credentials'],Response::HTTP_UNAUTHORIZED);
+            return response(['token' => $token], Response::HTTP_OK);
+        } else {
+            return response(['message' => 'Invalid Credentials'], Response::HTTP_UNAUTHORIZED);
         }
     }
 }
