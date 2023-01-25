@@ -16,11 +16,12 @@ use App\Http\Controllers\Api\FoodController;
 |
 */
 
-Route::post('register',[UserController::class,'register']);
-Route::post('login',[UserController::class, 'login']);
+Route::post('register', [UserController::class, 'register']);
+Route::post('login', [UserController::class, 'login']);
 
-Route::apiResource('foods',FoodController::class);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::apiResource('foods', FoodController::class);
 });
