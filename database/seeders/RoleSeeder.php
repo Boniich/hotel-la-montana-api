@@ -19,6 +19,10 @@ class RoleSeeder extends Seeder
         $adminRole = Role::create(['name' => 'Admin']);
         $comensalRole = Role::create(['name' => 'Comensal']);
 
+        //User
+        Permission::create(['name' => 'admin-can-change-roles'])->assignRole($adminRole);
+
+        //Food
         Permission::create(['name' => 'index'])->syncRoles([$adminRole, $comensalRole]);
         Permission::create(['name' => 'show'])->syncRoles([$adminRole, $comensalRole]);
 

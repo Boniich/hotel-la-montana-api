@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Cookie;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('can:admin-can-change-roles')->only('changeRole');
+    }
+
     public function register(Request $request)
     {
 
@@ -55,7 +61,6 @@ class UserController extends Controller
 
     public function changeRole(Request $request, User $user)
     {
-        //asegurar que sea solo el admin o alguien con role superior que pueda usar este metodo
 
         $request->validate([
             'roles' => 'required',
