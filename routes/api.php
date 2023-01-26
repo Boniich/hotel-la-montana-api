@@ -23,5 +23,5 @@ Route::post('login', [UserController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    Route::apiResource('foods', FoodController::class)->middleware('can:foods');
+    Route::apiResource('foods', FoodController::class);
 });
