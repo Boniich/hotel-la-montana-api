@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
+
+
+
+    public function __construct()
+    {
+        $this->middleware('can:index')->only('index');
+        $this->middleware('can:show')->only('show');
+        $this->middleware('can:store')->only('store');
+        $this->middleware('can:update')->only('update');
+        $this->middleware('can:destroy')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      *
