@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
         $user->email = "test@gmail.com";
         $user->password = Hash::make('123456');
 
-        $user->save();
+        $user->assignRole('Comensal')->save();
 
         User::create([
             'name' => 'Admin',
