@@ -52,4 +52,17 @@ class UserController extends Controller
             return response(['message' => 'Invalid Credentials'], Response::HTTP_UNAUTHORIZED);
         }
     }
+
+    public function changeRole(Request $request, User $user)
+    {
+        //asegurar que sea solo el admin o alguien con role superior que pueda usar este metodo
+
+        $request->validate([
+            'roles' => 'required',
+        ]);
+
+        $user->roles()->sync($request->roles);
+
+        return response(['message' => 'Roles successfully assigned']);
+    }
 }

@@ -24,4 +24,6 @@ Route::post('login', [UserController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::apiResource('foods', FoodController::class);
+
+    Route::put('changeRole/{user}', [UserController::class, 'changeRole']);
 });
