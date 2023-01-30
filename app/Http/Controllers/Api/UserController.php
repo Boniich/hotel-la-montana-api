@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cookie;
+use Spatie\Permission\Models\Role;
+use Symfony\Component\ErrorHandler\Debug;
 
 class UserController extends Controller
 {
@@ -59,13 +61,17 @@ class UserController extends Controller
 
     public function changeRole(Request $request, User $user)
     {
+        try {
+            $request->validate([
+                'roles' => 'required',
+            ]);
 
-        $request->validate([
-            'roles' => 'required',
-        ]);
+            $user->roles()->sync($request->roles);
 
-        $user->roles()->sync($request->roles);
+            return response(['message' => 'Roles successfully assigned']);
+        } catch (\Throwable $th) {
 
-        return response(['message' => 'Roles successfully assigned']);
+            return response(['Error' => 'Failed change role'], Response::HTTP_BAD_REQUEST);
+        }
     }
 }
