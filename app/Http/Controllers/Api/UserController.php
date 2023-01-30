@@ -20,26 +20,24 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
+        try {
 
-        //1- Validar los datos
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|confirmed'
+            ]);
 
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->assignRole('Comensal')->save();
 
-        //2- Alta de usuario
-
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->assignRole('Comensal')->save();
-
-        //3- Respuesta
-
-        return response($user, Response::HTTP_CREATED);
+            return response($user, Response::HTTP_CREATED);
+        } catch (\Throwable $th) {
+            return response(["Error" => "Register failed"], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     public function login(Request $request)
