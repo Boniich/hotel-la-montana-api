@@ -40,15 +40,7 @@ class FoodTest extends TestCase
         $comensalRole = Role::create(['name' => 'Comensal']);
         Permission::create(['name' => 'show'])->syncRoles([$adminRole, $comensalRole]);
 
-        $food = new Food();
-
-        $food->name = "Hamburgesa";
-        $food->description = "Clasica hamburgesa argentina";
-        $food->image = "image";
-        $food->price = 10.5;
-        $food->preparation_time = 5.5;
-
-        $food->save();
+        $food = Food::factory()->create();
 
         $user = User::factory()->create();
 
