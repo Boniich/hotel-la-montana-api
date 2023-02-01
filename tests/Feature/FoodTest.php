@@ -22,18 +22,13 @@ class FoodTest extends TestCase
     {
         Artisan::call('db:seed');
 
-        $user = new User();
+        $user = User::factory()->create();
 
-        $user->name = "Comensal";
-        $user->email = "test455@gmail.com";
-        $user->password = Hash::make('123456');
-
-        $user->assignRole('Admin')->save();
+        $user->assignRole('Admin');
 
         Sanctum::actingAs($user);
 
         $response = $this->get('api/foods');
-
 
         $response->assertStatus(200);
     }
@@ -55,14 +50,9 @@ class FoodTest extends TestCase
 
         $food->save();
 
+        $user = User::factory()->create();
 
-        $user = new User();
-
-        $user->name = "Comensal";
-        $user->email = "test455@gmail.com";
-        $user->password = Hash::make('123456');
-
-        $user->assignRole('Admin')->save();
+        $user->assignRole('Admin');
 
         Sanctum::actingAs($user);
 
